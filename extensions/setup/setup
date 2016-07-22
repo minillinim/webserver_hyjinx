@@ -101,6 +101,9 @@ virtualenv "$VENV_PATH/$VENV_NAME"
 
 # Switch to this environment
 echo "source $VENV_PATH/$VENV_NAME/bin/activate" > "$PROJECT_PATH/enable"
+echo "export ANSIBLE_CONFIG=$PROJECT_PATH/plays/ansible.cfg" >> "$PROJECT_PATH/enable"
+echo "export ANSIBLE_VAULT_PASSWORD_FILE=$PROJECT_PATH/vault.passwd" >> "$PROJECT_PATH/enable"
+
 . "$PROJECT_PATH/enable"
 
 # Install requirements
