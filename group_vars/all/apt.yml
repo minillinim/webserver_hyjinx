@@ -1,0 +1,15 @@
+---
+## Deploy Apt source custom template
+apt_update_source_list         : "template"  
+
+## use AARNET mirror
+apt_update_source_list_mirror  : "https://mirror.aarnet.edu.au/pub/ubuntu/" 
+
+## Install unattended package
+unattended_install             : True
+
+apt_default_packages           :
+                                  - python-apt
+                                  - unattended-upgrades
+                                  - language-pack-en-base
+                                  - unzip
