@@ -1,4 +1,4 @@
 [local]
-127.0.0.1 ansible_python_interpreter=/home/mimelfor/working/personal/webserver_hyjinx/extensions/setup/python_ansible/bin/python
+127.0.0.1 ansible_python_interpreter="/usr/bin/env python"
 
 [webserver]
