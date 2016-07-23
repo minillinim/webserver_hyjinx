@@ -1,0 +1,70 @@
+---
+  - name: "Create new security group: {{ security_group }}"
+    tags:
+      - create-group
+    ec2_group:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      name: "{{ security_group }}"
+      description: "{{ security_group_desc }}"
+      region: "{{ region }}"
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+      rules_egress:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+
+  - name: "Remove security group: {{ security_group }}"
+    tags:
+      - remove-group
+    ec2_group:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      name: "{{ security_group }}"
+      description: "{{ security_group_desc }}"
+      region: "{{ region }}"
+      state: absent
+
+  - name: Launch EC2 Instance
+    tags:
+      - launch-ec2
+    ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      group: "{{ security_group }}"
+      instance_type: "{{ instance_type}}"
+      image: "{{ image }}"
+      wait: true
+      region: "{{ region }}"
+      count: "{{count}}"
+    register: ec2
+
+  - name: Stop EC2 Instance
+    tags:
+      - stop-ec2
+    ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      instance_ids: '{{ instance_ids }}'
+      region: '{{ region }}'
+      state: '{{ state }}'
+
+  - name: Terminate EC2 Instance
+    tags:
+      - terminate-ec2
+    ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      instance_ids: '{{ instance_ids }}'
+      region: '{{ region }}'
+      state: absent
+

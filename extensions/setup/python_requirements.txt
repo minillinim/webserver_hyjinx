@@ -4,7 +4,7 @@ Jinja2
 httplib2
 
 # Ansible
-ansible==2.0.0
+ansible
 
 #Other packages
 boto
