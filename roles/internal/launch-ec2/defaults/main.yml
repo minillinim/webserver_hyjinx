@@ -1,0 +1,6 @@
+---
+instance_type          : m3.medium
+security_group         : hyjinx_group
+image                  : ami-ba3e14d9 # Ubuntu Server 14.04, HVM, SSD, 64 bit
+region                 : ap-southeast-2
+count                  : 1

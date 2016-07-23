@@ -24,3 +24,6 @@
 - src: git+https://github.com/AutomationWithAnsible/ansible-nginx.git
   version: "v1.0.3"
   name: ansible-nginx
+
+- src: git+https://github.com/Aplyca/ansible-role-ec2launch.git
+  name: Aplyca.ec2launch

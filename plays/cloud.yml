@@ -1,0 +1,12 @@
+---
+  - name: "Provision an EC2 Instance"
+    hosts: local
+    connection: local
+    gather_facts: False
+    tags: provisioning
+    vars_files:
+      - "{{inventory_dir}}/group_vars/all/vault.yml"
+      - "{{inventory_dir}}/group_vars/cloud/launch-ec2.yml"
+    roles:
+      - { role: launch-ec2 }
+
