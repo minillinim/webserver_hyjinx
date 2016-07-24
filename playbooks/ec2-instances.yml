@@ -5,8 +5,8 @@
     gather_facts: False
     tags: provisioning
     vars_files:
-      - '{{ inventory_dir }}/group_vars/all/vault.yml'
-      - '{{ inventory_dir }}/group_vars/webservers/ec2.yml'
+      - '{{ inventory_dir }}/vars/all/vault.yml'
+      - '{{ inventory_dir }}/vars/all/ec2.yml'
     roles:
       - { role: ec2-instances }
 

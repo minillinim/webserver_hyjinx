@@ -81,12 +81,9 @@ virtualenv "$VENV_PATH/$VENV_NAME"
 # Use this environment
 ENABLE_FILE="$DIR/enable"
 cat > $ENABLE_FILE << EndOfMessage
-#!/bin/bash
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-export PATH=$DIR:$PATH
 source $VENV_PATH/$VENV_NAME/bin/activate
 export ANSIBLE_ROOT=$PROJECT_PATH
-export ANSIBLE_CONFIG=$PROJECT_PATH/plays/ansible.cfg
+export ANSIBLE_CONFIG=$PROJECT_PATH/playbooks/ansible.cfg
 export ANSIBLE_VAULT_PASSWORD_FILE=$PROJECT_PATH/vault.passwd
 EndOfMessage
 
