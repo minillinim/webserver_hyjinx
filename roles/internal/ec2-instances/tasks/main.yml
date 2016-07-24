@@ -1,0 +1,35 @@
+---
+  - name: Launch EC2 Instance
+    tags:
+      - launch-ec2
+    ec2:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      group: '{{ security_group }}'
+      key_name: '{{ keypair_name }}'
+      instance_type: '{{ instance_type}}'
+      image: '{{ image }}'
+      wait: true
+      region: '{{ region }}'
+      count: '{{count}}'
+    register: ec2
+
+  - name: Stop EC2 Instance
+    tags:
+      - stop-ec2
+    ec2:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      instance_ids: '{{ instance_ids }}'
+      region: '{{ region }}'
+      state: stopped
+
+  - name: Terminate EC2 Instance
+    tags:
+      - terminate-ec2
+    ec2:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      instance_ids: '{{ instance_ids }}'
+      region: '{{ region }}'
+      state: absent

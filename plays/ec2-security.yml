@@ -1,0 +1,12 @@
+---
+  - name: 'Perform EC2 security management tasks'
+    hosts: local
+    connection: local
+    gather_facts: False
+    tags: provisioning
+    vars_files:
+      - '{{ inventory_dir }}/group_vars/all/vault.yml'
+      - '{{ inventory_dir }}/group_vars/webservers/ec2.yml'
+    roles:
+      - { role: ec2-security }
+

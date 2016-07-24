@@ -1,0 +1,56 @@
+---
+  - name: 'Create new security group: {{ security_group }}'
+    tags:
+      - create-group
+    ec2_group:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
+      name: '{{ security_group }}'
+      description: '{{ security_group_desc }}'
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+      rules_egress:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+
+  - name: 'Remove security group: {{ security_group }}'
+    tags:
+      - remove-group
+    ec2_group:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
+      name: '{{ security_group }}'
+      description: '{{ security_group_desc }}'
+      state: absent
+
+  - name: 'Create new keypair'
+    tags:
+      - create-keypair
+    ec2_key:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
+      name: '{{ keypair_name }}'
+      key_material: '{{ item }}'
+    with_file: '{{ public_key_path }}'
+
+  - name: 'Remove keypair'
+    tags:
+      - remove-keypair
+    ec2_key:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
+      name: '{{ keypair_name }}'
+      state: absent

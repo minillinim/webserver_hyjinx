@@ -1,9 +1,11 @@
 ---
-instance_type          : m3.medium
-security_group         : hyjinx_group
+aws_access_key         : '{{ aws_access_key_minillinim }}'
+aws_secret_key         : '{{ aws_secret_access_key_minillinim }}'
+security_group         : hyjinx-group
 security_group_desc    : Used for webserver hyjinx
+keypair_name           : hyjinx-keys
+public_key_path        : '/home/mimelfor/.ssh/id_rsa.pub'
+instance_type          : m3.medium
 image                  : ami-ba3e14d9
 region                 : ap-southeast-2
-aws_access_key         : "{{aws_access_key_minillinim}}"
-aws_secret_key         : "{{aws_secret_access_key_minillinim}}"
 count                  : 1
