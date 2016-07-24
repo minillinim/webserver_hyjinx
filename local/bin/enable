@@ -1,0 +1,7 @@
+#!/bin/bash
+DIR=/home/mimelfor/working/personal/webserver_hyjinx/local/bin
+export PATH=/home/mimelfor/working/personal/webserver_hyjinx/local/bin:/home/mimelfor/working/personal/webserver_hyjinx/local/bin:/home/mimelfor/local/opt/grails/bin:/home/mimelfor/.rvm/gems/ruby-2.2.0/bin:/home/mimelfor/.rvm/gems/ruby-2.2.0@global/bin:/home/mimelfor/.rvm/rubies/ruby-2.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/mimelfor/.rvm/bin:/home/mimelfor/local/bin:/home/mimelfor/.rvm/bin
+source /home/mimelfor/working/personal/webserver_hyjinx/local/opt/python_ansible/bin/activate
+export ANSIBLE_ROOT=/home/mimelfor/working/personal/webserver_hyjinx
+export ANSIBLE_CONFIG=/home/mimelfor/working/personal/webserver_hyjinx/plays/ansible.cfg
+export ANSIBLE_VAULT_PASSWORD_FILE=/home/mimelfor/working/personal/webserver_hyjinx/vault.passwd

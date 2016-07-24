@@ -34,7 +34,7 @@
       description: '{{ security_group_desc }}'
       state: absent
 
-  - name: 'Create new keypair'
+  - name: Create new keypair
     tags:
       - create-keypair
     ec2_key:
@@ -42,8 +42,16 @@
       aws_secret_key: '{{ aws_secret_key }}'
       region: '{{ region }}'
       name: '{{ keypair_name }}'
-      key_material: '{{ item }}'
-    with_file: '{{ public_key_path }}'
+    register: keypair
+
+  - name: Save keypair
+    tags:
+      - create-keypair
+    copy:
+      dest: '{{ keypair_path }}/{{ keypair_name }}.pem'
+      content: "{{ keypair.key.private_key }}"
+      mode: 0600
+    when: keypair.changed
 
   - name: 'Remove keypair'
     tags:

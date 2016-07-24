@@ -1,5 +1,0 @@
----
-keypair_name           : hyjinx-keys
-security_group         : hyjinx-group
-security_group_desc    : Used for webserver hyjinx
-region                 : ap-southeast-2

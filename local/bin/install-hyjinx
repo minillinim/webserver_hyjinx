@@ -39,8 +39,9 @@ set -e
 
 eval set -- "$TEMP"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+LOCAL_ROOT=$(realpath "$DIR/../")
 PROJECT_PATH=$(realpath "$DIR/../../")
-VENV_PATH=$DIR
+VENV_PATH="$LOCAL_ROOT/opt"
 
 while true; do
   case "$1" in
@@ -57,30 +58,7 @@ COLOR_YEL='\e[0;33m' # Yellow
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 VENV_NAME="python_ansible"
-PYTHON_REQUIREMNTS_FILE="$DIR/python_requirements.txt"
-
-msg_exit() {
-    printf "$COLOR_RED$@$COLOR_END"
-    printf "\n"
-    printf "Exiting...\n"
-    exit 1
-}
-
-msg_warning() {
-    printf "$COLOR_YEL$@$COLOR_END"
-    printf "\n"
-}
-
-prompt_confirm() {
-  while true; do
-    read -r -n 1 -p "${1:-Continue?} [y/n]: " REPLY
-    case $REPLY in
-      [yY]) echo ; return 0 ;;
-      [nN]) echo ; return 1 ;;
-      *) printf " \033[31m %s \n\033[0m" "invalid input"
-    esac 
-  done  
-}
+PYTHON_REQUIREMNTS_FILE="$LOCAL_ROOT/python_requirements.txt"
 
 # Check if root
 [[ "$(whoami)" == "root" ]] && msg_exit "Please run as a normal user not root"
@@ -93,28 +71,35 @@ prompt_confirm() {
 [[ ! -f "$PYTHON_REQUIREMNTS_FILE" ]]  && msg_exit "python_requirements '$PYTHON_REQUIREMNTS_FILE' does not exist or permssion issue.\nPlease check and rerun."
 
 # last chance
-msg_warning "Your system is OK. Will install ansible in a virtual environment at: $VENV_PATH/$VENV_NAME"
+msg_warning "Your system is OK."
+msg_warning "Virtualenv path: $VENV_PATH/$VENV_NAME"
 prompt_confirm "Install Ansible?" || msg_exit "Terminating..."
 
 # Create venv
 virtualenv "$VENV_PATH/$VENV_NAME"
 
-# Switch to this environment
-ENABLE_FILE="$PROJECT_PATH/enable"
-echo "source $VENV_PATH/$VENV_NAME/bin/activate" > $ENABLE_FILE
-echo "export ANSIBLE_ROOT=$PROJECT_PATH" >> $ENABLE_FILE
-echo "export ANSIBLE_CONFIG=$PROJECT_PATH/plays/ansible.cfg" >> $ENABLE_FILE
-echo "export ANSIBLE_VAULT_PASSWORD_FILE=$PROJECT_PATH/vault.passwd" >> $ENABLE_FILE
+# Use this environment
+ENABLE_FILE="$DIR/enable"
+cat > $ENABLE_FILE << EndOfMessage
+#!/bin/bash
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+export PATH=$DIR:$PATH
+source $VENV_PATH/$VENV_NAME/bin/activate
+export ANSIBLE_ROOT=$PROJECT_PATH
+export ANSIBLE_CONFIG=$PROJECT_PATH/plays/ansible.cfg
+export ANSIBLE_VAULT_PASSWORD_FILE=$PROJECT_PATH/vault.passwd
+EndOfMessage
 
 . $ENABLE_FILE
 
-# Install requirements
-pip install --upgrade pip setuptools
+# Install Ansible
+pip install pip --upgrade
+pip install setuptools --upgrade
 pip install -r "$PYTHON_REQUIREMNTS_FILE"
 
 # Touch vault password file so that things wont instantly break
 touch "$PROJECT_PATH/vault.passwd"
 
-msg_warning "Setup complete. Type: source $PROJECT_PATH/enable to begin using Ansible"
+msg_warning "Setup complete. Type: source $LOCAL_ROOT/bin/enable to begin using Ansible"
 
 exit 0

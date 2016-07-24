@@ -1,0 +1,7 @@
+---
+base_name              : hyjinx
+keypair_name           : '{{ base_name }}'
+keypair_path           : /home/mimelfor/.ssh/
+security_group         : '{{ base_name }}-group'
+security_group_desc    : 'Used for webserver {{ base_name }}'
+region                 : ap-southeast-2

@@ -1,5 +1,3 @@
 vault.passwd
-python_ansible
-enable
-roles/external
 *.retry
+local/opt/python_ansible

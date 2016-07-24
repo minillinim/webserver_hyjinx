@@ -1,0 +1,12 @@
+---
+base_name              : hyjinx
+aws_access_key         : '{{ aws_access_key_minillinim }}'
+aws_secret_key         : '{{ aws_secret_access_key_minillinim }}'
+security_group         : '{{ base_name }}-group'
+security_group_desc    : 'Used for webserver {{ base_name }}'
+keypair_name           : '{{ base_name }}'
+keypair_path           : /home/mimelfor/.ssh/
+instance_type          : t2.micro #m3.medium
+image                  : ami-ba3e14d9
+region                 : ap-southeast-2
+count                  : 1
