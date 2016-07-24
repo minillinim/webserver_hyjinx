@@ -1,8 +1,13 @@
 ---
 base_name              : hyjinx
+region                 : ap-southeast-2
 keypair_name           : '{{ base_name }}'
 security_group         : '{{ base_name }}-group'
 instance_type          : m3.medium
 image                  : ami-ba3e14d9
-region                 : ap-southeast-2
 count                  : 1
+volume_size            : 50
+volume_type            : standard
+volume_name            : '{{base_name}}-{{volume_size}}GB'
+delete_vol_on_term     : yes
+device_name            : xvdf

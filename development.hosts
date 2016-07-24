@@ -1,4 +1,5 @@
 [local]
-127.0.0.1 ansible_python_interpreter="/usr/bin/env python"
+127.0.0.1
 
-[webserver]
+[webservers]
+52.63.84.174

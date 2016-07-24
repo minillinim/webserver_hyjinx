@@ -1,0 +1,8 @@
+---
+  - name: Mount the EBS volume
+    hosts: webservers
+    gather_facts: True
+    tags:
+      - deployment
+    roles:
+      - { role: volume }

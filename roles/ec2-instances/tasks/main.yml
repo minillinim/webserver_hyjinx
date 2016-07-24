@@ -5,14 +5,29 @@
     ec2:
       aws_access_key: '{{ aws_access_key }}'
       aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
       group: '{{ security_group }}'
       key_name: '{{ keypair_name }}'
       instance_type: '{{ instance_type}}'
       image: '{{ image }}'
       wait: true
-      region: '{{ region }}'
       count: '{{count}}'
     register: ec2
+
+  - name: Create volume and attach to instance
+    tags:
+      - launch-ec2
+    ec2_vol:
+      aws_access_key: '{{ aws_access_key }}'
+      aws_secret_key: '{{ aws_secret_key }}'
+      region: '{{ region }}'
+      instance: '{{ item.id }}'
+      name: '{{ item.id }}-{{ volume_name }}'
+      device_name: /dev/xvdf
+      volume_size: '{{ volume_size }}'
+      volume_type: '{{ volume_type }}'
+      delete_on_termination: '{{ delete_vol_on_term }}'
+    with_items: '{{ ec2.instances }}'
 
   - name: Wait for SSH to come up
     tags:
@@ -38,8 +53,8 @@
     ec2:
       aws_access_key: '{{ aws_access_key }}'
       aws_secret_key: '{{ aws_secret_key }}'
-      instance_ids: '{{ instance_ids }}'
       region: '{{ region }}'
+      instance_ids: '{{ instance_ids }}'
       state: stopped
 
   - name: Terminate EC2 instance
@@ -48,6 +63,6 @@
     ec2:
       aws_access_key: '{{ aws_access_key }}'
       aws_secret_key: '{{ aws_secret_key }}'
-      instance_ids: '{{ instance_ids }}'
       region: '{{ region }}'
+      instance_ids: '{{ instance_ids }}'
       state: absent
