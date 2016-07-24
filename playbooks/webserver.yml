@@ -2,7 +2,17 @@
   - name: Mount the EBS volume
     hosts: webservers
     gather_facts: True
-    tags:
-      - deployment
     roles:
-      - { role: volume }
+      - { role: ec2-volume, tags: [ 'volume' ] }
+
+  - name: Install docker on the host
+    hosts: webservers
+    gather_facts: False
+    roles:
+      - { role: docker, tags: [ 'docker' ] }
+
+  - name: Install nginx docker image
+    hosts: webservers
+    gather_facts: True
+    roles:
+      - { role: nginx, tags: [ 'nginx' ] }

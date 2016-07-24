@@ -1,0 +1,4 @@
+---
+log_path                     : '{{ volume_mnt_point }}/logs'
+www_user                     : www-user
+www_group                    : www-user

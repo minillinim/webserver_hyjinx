@@ -1,0 +1,37 @@
+---
+  - name: 'Check to see if "{{ volume_mnt_point }}" exists already'
+    stat: 
+      path: '{{ volume_mnt_point }}'
+    register: mount_point
+
+  - name: 'Add a label to the volume so that parted recognises it {{ ansible_ssh_private_key_file }}'
+    shell: 'parted /dev/{{ device_name }} --script mklabel gpt'
+    when: mount_point.stat.exists == False
+    become: true
+
+  - name: Make the partition cover 100% of the space
+    shell: 'parted -a optimal /dev/{{ device_name }} mkpart primary 0% 100%'
+    when: mount_point.stat.exists == False
+    become: true
+
+  - name: Add a file system
+    shell: 'mkfs.ext4 /dev/{{ device_name }}1'
+    when: mount_point.stat.exists == False
+    become: true
+
+  - name: Make a mount point on the FS
+    file: 
+      path: '{{ volume_mnt_point }}'
+      state: directory
+    when: mount_point.stat.exists == False
+    become: true
+
+  - name: Inject the UUID into FSTAB
+    shell: 'echo $(blkid | grep {{ device_name }} | grep UUID | sed -e "s%.*UUID=.%UUID=%" -e "s%. TYPE.*% {{ volume_mnt_point }} ext4 defaults 0 0%" >> /etc/fstab)'
+    when: mount_point.stat.exists == False
+    become: true
+
+  - name: mount the volume
+    shell: mount -a
+    when: mount_point.stat.exists == False
+    become: true

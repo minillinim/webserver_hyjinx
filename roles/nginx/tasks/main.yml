@@ -1,0 +1,27 @@
+---
+  - name: Get a list of the current groups
+    shell: 'getent group | sed -e "s/[^a-z|-].*//"'
+    register: etc_groups
+
+  - name: Get a list of the current users
+    shell: 'cat /etc/passwd | sed -e "s/[^a-z|-].*//"'
+    register: etc_passwd
+    become: true
+
+  - name: Add a group for web user if it does not exist
+    group:
+      name: '{{ www_group }}'
+      state: present
+    when: '"{{ www_group }}" not in "{{ etc_groups.stdout_lines }}"'
+    become: true
+
+  - name: Add the web user if it does not exist
+    user:
+      name: '{{ www_user }}'
+      state: present
+      group: '{{ www_group }}'
+      createhome: no
+    when: '"{{ www_user }}" not in "{{ etc_passwd.stdout_lines }}"'
+    become: true
+
+  

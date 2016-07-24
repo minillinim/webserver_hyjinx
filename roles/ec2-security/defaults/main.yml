@@ -5,3 +5,18 @@ keypair_name           : '{{ base_name }}'
 keypair_path           : /home/user/.ssh/
 security_group         : '{{ base_name }}-group'
 security_group_desc    : 'Used for webserver {{ base_name }}'
+ssh_proto:
+  proto: tcp
+  from_port: 22
+  to_port: 22
+  cidr_ip: 0.0.0.0/0
+http_proto:
+  proto: tcp
+  from_port: 80
+  to_port: 80
+  cidr_ip: 0.0.0.0/0
+https_proto:
+  proto: tcp
+  from_port: 443
+  to_port: 443
+  cidr_ip: 0.0.0.0/0

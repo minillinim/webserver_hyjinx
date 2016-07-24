@@ -1,0 +1,75 @@
+---
+  - name: Make sure we have upgraded the server
+    apt:
+      update_cache: yes
+      upgrade: dist
+      force: yes
+    become: true
+
+  - name: Grab uname -r
+    command: uname -r
+    register: uname
+
+  - name: Install Docker dependencies
+    apt:
+      name: '{{ item }}'
+      state: installed
+      force: yes
+    with_items:
+       - apt-transport-https
+       - ca-certificates
+       - 'linux-image-extra-{{ uname.stdout }}'
+    become: true
+
+  - name: Install GPG key
+    apt_key:
+      keyserver: '{{ docker_keyserver }}'
+      id: '{{ docker_key_id }}'
+      state: present
+    become: true
+
+  - name: Create docker.list file
+    file:
+      path: '{{ docker_list_path }}'
+      state: touch
+    become: true
+
+  - name: Add docker source to file
+    lineinfile:
+      dest: '{{ docker_list_path }}'
+      state: present
+      line: '{{ docker_list_content }}'
+    become: true
+
+  - name: Update again
+    apt:
+      update_cache: yes
+      force: yes
+    become: true
+
+  - name: Install (or reinstall) Docker
+    apt: 
+      name: docker-engine
+      state: installed
+      force: yes
+    become: true
+
+  - name: Add ansible_user user to the docker group
+    user:
+      name: '{{ ansible_user }}'
+      groups: docker
+      append: yes
+    become: true
+
+  - name: Change storage location of Docker images
+    lineinfile:
+        dest: /etc/default/docker
+        state: present
+        line: 'DOCKER_OPTS="-g {{ volume_mnt_point }}/docker"'
+    become: true
+
+  - name: Restart Docker
+    service:
+      name: docker
+      state: restarted
+    become: true

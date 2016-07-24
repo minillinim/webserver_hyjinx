@@ -1,0 +1,2 @@
+---
+log_path                     : '{{ volume_mnt_point }}/logs'
