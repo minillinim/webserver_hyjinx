@@ -1,12 +1,12 @@
 ---
-aws_access_key               : '{{ aws_access_key_minillinim }}'
-aws_secret_key               : '{{ aws_secret_access_key_minillinim }}'
+aws_access_key               : '{{ aws_access_key_EDH }}'
+aws_secret_key               : '{{ aws_secret_access_key_EDH }}'
 region                       : ap-southeast-2
 security_group               : '{{ base_name }}-group'
 security_group_desc          : 'Used for webserver {{ base_name }}'
 keypair_name                 : '{{ base_name }}'
 keypair_path                 : /home/mimelfor/.ssh/
-instance_type                : t2.micro #m3.medium
+instance_type                : m3.medium
 image                        : ami-ba3e14d9
 count                        : 1
 ansible_user                 : ubuntu
