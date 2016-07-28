@@ -13,10 +13,13 @@ This is an Ansible project that deploys an nginx-elastic-kibana web stack onto A
 The setup is opinionated. It assumes you'd like to set up Ansible in a virtual environment. Please do.
 
 ```
- $ cd <project_root>/extensions/setup/
- $ ./setup [-v|--venv-path <PATH>]
- $ . enable
+ $ git clone git@github.com:minillinim/webserver_hyjinx.git
+ $ cd webserver_hyjinx
+ $ ./local/bin/install-hyjinx
+ $ . ./local/bin/enable
 ```
+
+Fomr now on, I'll refer to the folder `webserver_hyjinx` as the `<project_root>`.
 
 Naming things is THE HARDEST thing. Check out the file `group_vars\all\common.yml` and set the `base_name` var to something sensible. Many things created by this project will be named using this variable, so make it unique.
 
