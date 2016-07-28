@@ -1,0 +1,25 @@
+---
+  - name: Make the www folder
+    file:
+      path: '{{ www_mnt_point }}'
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+      state: directory
+    become: true
+
+  - name: Copy over the site
+    unarchive:
+      src: templates/www.tar.gz
+      dest: '{{ www_mnt_point }}'
+
+  - name: Create startup and shutdown scripts
+    template:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+      mode: "u=rwx,g=rx"
+    with_items:
+      - { src: 'templates/start-web-stack.j2', dest: '/usr/local/bin/start-web-stack' }
+      - { src: 'templates/stop-web-stack.j2', dest: '/usr/local/bin/stop-web-stack' }
+    become: true

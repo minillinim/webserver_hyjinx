@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CONTAINER_NAME="{{ nginx_container_name }}"
+CONTAINER_ROOT="{{ nginx_path }}"
+IMAGE_NAME="{{ nginx_image_name }}"
+WWW_ROOT="{{ www_mnt_point }}"
+
+CONTAINER=$(docker ps -a | grep $CONTAINER_NAME | tr -s ' ' | cut -d ' ' -f 2)
+if [ -n "$CONTAINER" ]; then
+  docker stop $CONTAINER_NAME
+  docker rm $CONTAINER_NAME
+fi
+
+docker run -d \
+  --name $CONTAINER_NAME \
+  --link {{ es_container_name }}:{{ es_container_name }} \
+  --link {{ kibana_container_name }}:{{ kibana_container_name }} \
+  -p {{ kibana_proxy_http_port }}:8080 \
+  -p {{ nginx_http_port }}:80 \
+  -v $WWW_ROOT:/var/www/nginx/html:ro \
+  $IMAGE_NAME

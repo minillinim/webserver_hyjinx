@@ -61,11 +61,26 @@
       append: yes
     become: true
 
+  - name: 'Check to see if "{{ volume_mnt_point }}" exists already'
+    stat: 
+      path: '{{ volume_mnt_point }}'
+    register: mount_point
+
   - name: Change storage location of Docker images
     lineinfile:
         dest: /etc/default/docker
         state: present
         line: 'DOCKER_OPTS="-g {{ volume_mnt_point }}/docker"'
+    when: mount_point.stat.exists == True
+    become: true
+
+  - name: Make a folder for the containers
+    file: 
+      path: '{{ container_mnt_point }}'
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+      state: directory
+    when: mount_point.stat.exists == True
     become: true
 
   - name: Restart Docker

@@ -1,27 +1,48 @@
 ---
-  - name: Get a list of the current groups
-    shell: 'getent group | sed -e "s/[^a-z|-].*//"'
-    register: etc_groups
+  - name: Make a folder for this container
+    tags:
+      - deploy-nginx
+    file:
+      path: '{{ nginx_path }}'
+      state: directory
 
-  - name: Get a list of the current users
-    shell: 'cat /etc/passwd | sed -e "s/[^a-z|-].*//"'
-    register: etc_passwd
-    become: true
+  - name: 'Copy nginx image setup template files to the remote host'
+    tags:
+      - deploy-nginx
+    template:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'templates/nginx.conf.j2', dest: '{{ nginx_path }}/nginx.conf' }
+      - { src: 'templates/start.j2', dest: '{{ nginx_path }}/start' }
+      - { src: 'templates/nginx-rsyslog.conf.j2', dest: '{{ nginx_path }}/nginx-rsyslog.conf' }
 
-  - name: Add a group for web user if it does not exist
-    group:
-      name: '{{ www_group }}'
-      state: present
-    when: '"{{ www_group }}" not in "{{ etc_groups.stdout_lines }}"'
-    become: true
+  - name: Make the start file executable
+    tags:
+      - deploy-nginx
+    file:
+      path: '{{ nginx_path }}/start'
+      state: file
+      mode: "u=rwx,g=rx"
 
-  - name: Add the web user if it does not exist
-    user:
-      name: '{{ www_user }}'
-      state: present
-      group: '{{ www_group }}'
-      createhome: no
-    when: '"{{ www_user }}" not in "{{ etc_passwd.stdout_lines }}"'
-    become: true
+  - name: Copy remaining nginx image setup files to the remote host
+    tags:
+      - deploy-nginx
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'templates/Dockerfile', dest: '{{ nginx_path }}/Dockerfile' }
+      - { src: 'templates/nginx.rb', dest: '{{ nginx_path }}/nginx.rb' }
+      - { src: 'templates/start-server', dest: '{{ nginx_path }}/start-server' }
 
-  
+  - name: Copy across the http password file for kibana
+    tags: 
+      - deploy-nginx
+    command: "bash -lc \"echo '{{ kibana_creds }}' > {{ nginx_path }}/kibana.htpasswd\""
+
+  - name: Build the nginx + rsyslog docker image
+    tags:
+      - deploy-nginx
+    command: 'bash -lc "cd {{ nginx_path }} && docker build -t {{ nginx_image_name }} ."'
+

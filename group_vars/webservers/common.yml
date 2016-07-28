@@ -1,4 +1,4 @@
 ---
-log_path                     : '{{ volume_mnt_point }}/logs'
-www_user                     : www-user
-www_group                    : www-user
+volume_mnt_point                : /vol
+www_mnt_point                   : '{{ volume_mnt_point }}/www'
+kibana_creds                    : '{{ kibana_user }}:{{ kibana_passwd }}'

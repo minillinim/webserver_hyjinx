@@ -1,0 +1,15 @@
+---
+  - name: Make a folder for this container
+    tags:
+      - deploy-es
+    file:
+      path: '{{ es_path }}'
+      state: directory
+
+  - name: Copy elasticsearch startup file to the remote host
+    tags:
+      - deploy-es
+    template: 
+      src: 'templates/start.j2'
+      dest: '{{ es_path }}/start'
+      mode: "u=rwx,g=rx"

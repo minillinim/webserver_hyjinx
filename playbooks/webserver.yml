@@ -3,16 +3,22 @@
     hosts: webservers
     gather_facts: True
     roles:
-      - { role: ec2-volume, tags: [ 'volume' ] }
+      - { role: ec2-volume, tags: [ 'volume'] }
 
   - name: Install docker on the host
     hosts: webservers
     gather_facts: False
     roles:
-      - { role: docker, tags: [ 'docker' ] }
+      - { role: docker, tags: [ 'docker'] }
 
-  - name: Install nginx docker image
+  - name: Copy container resources to the remote host and build if necessary
     hosts: webservers
-    gather_facts: True
     roles:
-      - { role: nginx, tags: [ 'nginx' ] }
+     - { role: nginx, tags: [ 'deploy-containers' ] }
+     - { role: elastic, tags: [ 'deploy-containers' ] }
+     - { role: kibana, tags: [ 'deploy-containers' ] }
+
+  - name: Copy over the static website
+    hosts: webservers
+    roles:
+      - { role: www, tags: [ 'deploy-site' ] }

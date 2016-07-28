@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for c in {{ nginx_container_name }} {{ kibana_container_name }} {{ es_container_name }}; do
+  docker stop $c
+  docker rm $c
+done

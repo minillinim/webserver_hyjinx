@@ -1,0 +1,5 @@
+---
+kibana_container_name           : kibana
+kibana_image_name               : kibana
+kibana_path                     : '{{ container_mnt_point }}/{{ kibana_container_name }}'
+kibana_http_port                : 5601

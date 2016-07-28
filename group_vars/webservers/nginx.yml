@@ -1,2 +1,4 @@
 ---
-log_path                     : '{{ volume_mnt_point }}/logs'
+nginx_container_name            : nginx
+nginx_image_name                : nginx-rsyslog
+nginx_http_port                 : 80

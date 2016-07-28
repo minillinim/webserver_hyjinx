@@ -1,0 +1,66 @@
+module(load="imfile")
+module(load="mmnormalize")
+module(load="omelasticsearch")
+
+input(type="imfile"
+  File="/var/log/nginx/access.log"
+  Tag="nginx:"
+)
+
+main_queue(
+  queue.workerThreads="4"
+  queue.dequeueBatchSize="10"
+  queue.highWatermark="40000"
+  queue.lowWatermark="2000"
+  queue.spoolDirectory="/var/run/rsyslog/queues"
+  queue.fileName="stats_ruleset"
+  queue.maxDiskSpace="5g"
+  queue.size="50000"
+  queue.saveOnShutdown="on"
+)
+
+action(type="mmnormalize"
+  rulebase="/opt/rsyslog/nginx.rb"
+)
+
+template(name="logstash-accesslog"
+         type="list"
+         option.json="on") {
+           constant(value="{")
+             constant(value="\"@timestamp\":\"")         property(name="timereported" dateFormat="rfc3339")
+             constant(value="\",\"host\":\"")            property(name="fromhost-ip")
+             constant(value="\",\"@source_host\":\"")    property(name="hostname")
+             constant(value="\",\"bytes\":\"")           property(name="$!bytesend")
+             constant(value="\",\"clientip\":\"")        property(name="$!ip")
+             constant(value="\",\"method\":\"")          property(name="$!method")
+             constant(value="\",\"request\":\"")         property(name="$!url")
+             constant(value="\",\"referrer\":\"")        property(name="$!referer")
+             constant(value="\",\"useragent\":\"")       property(name="$!useragent")
+             constant(value="\",\"status\":\"")          property(name="$!status")
+           constant(value="\"}")
+         }
+
+
+# indexing for kibana
+template(name="logstash-index" type="list") {
+  constant(value="logstash-")
+  property(name="timereported" dateFormat="rfc3339" position.from="1" position.to="4")
+  constant(value=".")
+  property(name="timereported" dateFormat="rfc3339" position.from="6" position.to="7")
+  constant(value=".")
+  property(name="timereported" dateFormat="rfc3339" position.from="9" position.to="10")
+}
+
+# only send logs that work
+if $parsesuccess == "OK" then {
+  action(type="omelasticsearch"
+    template="logstash-accesslog"
+    dynSearchIndex="on"
+    searchIndex="logstash-index"
+    searchType="events"
+    server="{{ es_container_name }}"
+    serverport="{{ es_http_port }}"
+    bulkmode="on"
+    action.resumeretrycount="-1"
+  )
+}

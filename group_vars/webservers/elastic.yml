@@ -1,0 +1,4 @@
+---
+es_container_name          : elastic
+es_image_name              : elasticsearch
+es_http_port               : 9200

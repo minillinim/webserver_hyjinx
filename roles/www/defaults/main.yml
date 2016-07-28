@@ -1,0 +1,2 @@
+---
+www_mnt_point               : '{{ volume_mnt_point }}/www'

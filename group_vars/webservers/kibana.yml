@@ -1,0 +1,5 @@
+---
+kibana_container_name           : kibana
+kibana_image_name               : kibana
+kibana_http_port                : 5601
+kibana_proxy_http_port          : 8080

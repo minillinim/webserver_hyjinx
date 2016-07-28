@@ -1,0 +1,5 @@
+---
+es_container_name          : elastic
+es_image_name              : elasticsearch
+es_path                    : '{{ container_mnt_point }}/{{ es_container_name }}'
+es_http_port               : 9200

@@ -1,0 +1,22 @@
+---
+  - name: Make a folder for this container
+    tags:
+      - deploy-kibana
+    file:
+      path: '{{ kibana_path }}'
+      state: directory
+
+  - name: Copy kibana startup file to the remote host
+    tags:
+      - deploy-kibana
+    template: 
+      src: 'templates/start.j2'
+      dest: '{{ kibana_path }}/start'
+      mode: "u=rwx,g=rx"
+
+  - name: Copy kibana settings file to the remote host
+    tags:
+      - deploy-kibana
+    template: 
+      src: 'templates/kibana.yml.j2'
+      dest: '{{ kibana_path }}/kibana.yml'

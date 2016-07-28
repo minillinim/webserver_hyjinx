@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+cd {{ container_mnt_point }}/{{ es_container_name }} && ./start
+cd {{ container_mnt_point }}/{{ kibana_container_name }} && ./start
+cd {{ container_mnt_point }}/{{ nginx_container_name }} && ./start

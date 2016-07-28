@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CONTAINER_NAME="{{ es_container_name }}"
+CONTAINER_ROOT="{{ es_path }}"
+IMAGE_NAME="{{ es_image_name }}"
+
+CONTAINER=$(docker ps -a | grep $CONTAINER_NAME | tr -s ' ' | cut -d ' ' -f 2)
+if [ -n "$CONTAINER" ]; then
+  docker stop $CONTAINER_NAME
+  docker rm $CONTAINER_NAME
+fi
+
+docker run -d \
+  --name $CONTAINER_NAME \
+  -p {{ es_http_port }}:9200 \
+  $IMAGE_NAME 

@@ -1,3 +1,5 @@
 ---
-www_user                     : www-data
-www_group                    : www-data
+nginx_container_name            : nginx
+nginx_image_name                : nginx-rsyslog
+nginx_path                      : '{{ container_mnt_point }}/{{ nginx_container_name }}'
+nginx_http_port                 : 80
