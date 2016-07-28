@@ -20,3 +20,8 @@ ec2-terminate-instance:
 configure-server:
 	ansible-playbook -i development.hosts playbooks/webserver.yml
 
+containers:
+	ansible-playbook -i development.hosts playbooks/webserver.yml -t deploy-containers
+
+site:
+	ansible-playbook -i development.hosts playbooks/webserver.yml -t deploy-site
