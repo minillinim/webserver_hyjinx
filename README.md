@@ -14,9 +14,9 @@ The setup is opinionated. It assumes you'd like to set up Ansible in a virtual e
 
 ```
  $ git clone git@github.com:minillinim/webserver_hyjinx.git
- $ cd webserver_hyjinx/extensions/setup/
- $ ./setup [-v|--venv-path <PATH>]
- $ . enable
+ $ cd webserver_hyjinx
+ $ ./local/bin/install-hyjinx
+ $ . ./local/bin/enable
 ```
 
 Fomr now on, I'll refer to the folder `webserver_hyjinx` as the `<project_root>`.
