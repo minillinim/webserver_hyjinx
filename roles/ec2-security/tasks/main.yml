@@ -11,8 +11,10 @@
       rules:
         - '{{ ssh_proto }}'
         - '{{ http_proto }}'
+        - '{{ http_proto_8080 }}'
       rules_egress:
         - '{{ http_proto }}'
+        - '{{ http_proto_8080 }}'
         - '{{ https_proto }}'
 
   - name: 'Remove security group: {{ security_group }}'

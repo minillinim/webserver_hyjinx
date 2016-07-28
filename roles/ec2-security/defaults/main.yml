@@ -15,6 +15,11 @@ http_proto:
   from_port: 80
   to_port: 80
   cidr_ip: 0.0.0.0/0
+http_proto_8080:
+  proto: tcp
+  from_port: 8080
+  to_port: 8080
+  cidr_ip: 0.0.0.0/0
 https_proto:
   proto: tcp
   from_port: 443
