@@ -127,7 +127,7 @@ Which skips the Docker installation. Finally, you can redeploy any site using th
 $ ansible-playbook -i development.hosts playbooks/webserver.yml -t deploy-<container_name>
 ```
 
-# starting it all up
+# Starting it all up
 
 Log into the webserver using the command:
 
