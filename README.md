@@ -1,6 +1,6 @@
 #Webserver hijinx on AWS for fun and profit
 
-This is an Ansible project that
+This is an Ansible project that deploys an nginx-elastic-kibana web stack onto AWS. Note there's no Logstash, it's an experiment with rsyslog that seems to work.
 
 #Requirements
 
@@ -24,7 +24,7 @@ Naming things is THE HARDEST thing. Check out the file `group_vars\all\common.ym
 
 The project makes use of Ansible vault. You will need to create a new encrypted var file called: `vault.yml` which resides in the `group_vars\all` folder. Place the password for the vault in the `vault.passwd` file in the `<project_root>` (this file is ignored by git by default).
 
-The kibana site is password protected. Use `htpasswd` to make a new user and password and add this information to the vault so that your file looks like this:
+The Kibana site is password protected. Use `htpasswd` to make a new user and password and add this information to the vault so that your file looks like this:
 
 ```
 ---
@@ -39,7 +39,7 @@ Where:
 `__PASS.1__:__PASS.2__` is the contents of the output from `htpasswd` split at the `:`.
 UID uniquely identifies these AWS keys and matches with the entries in `group_vars\all\ec2.yml`
 
-ie:
+i.e.:
 
 ```
 aws_access_key               : '{{ aws_access_key_UID }}'
@@ -86,7 +86,7 @@ It also provisions a 50GB volume and attaches it to the image. This is where we'
 
 Once this has completed, you need to add the IP address that AWS provides in the Ansible output to the "[webservers]" group of the development.hosts file:
 
-For example, if things went well you should see the message" `"msg": "EC2 instance: i-b9b2c13b is up at: 52.63.186.119"` at the bottom of Ansibles output. Add the address `52.63.186.119` under the text `[webservers]` in the `development.hosts` file. Future steps will target this instance.
+For example, if things went well you should see the message" `"msg": "EC2 instance: i-b9b2c13b is up at: 52.63.186.119"` at the bottom of Ansible's output. Add the address `52.63.186.119` under the text `[webservers]` in the `development.hosts` file. Future steps will target this instance.
 
 You can terminate an instance(s) you've made using the command:
 
@@ -105,7 +105,7 @@ Finally it's time to load the webserver containers onto the instance. You can do
 $ make configure-server
 ```
 
-This command properly mounts the volume (@ /vol), installs docker on the instance and then deploys three docker containers: official `kibana`, `elasticsearch` containers and a custom build of the official nginx container that uses rsyslog to speak with elastic, so no logstash. Why? I thought it would be fun. It was just hard. But noe that it's done I'm intrigued to see if I can make it more robust.
+This command properly mounts the volume (@ /vol), installs Docker on the instance and then deploys three Docker containers: official `Kibana`, `ElasticSearch` containers and a custom build of the official nginx container that uses rsyslog to speak with elastic, so no LogStash. Why? I thought it would be fun. It was just hard. But now that it's done I'm intrigued to see if I can make it more robust.
 
 Each container has a startup file which handles volume mounting stuff and linking to the other containers. Check out `/vol/containers/<container>/start` to see the specific settings for each container. All the ports these servers operate and locations of mount points etc. can be tweaked using the `group_vars\webservers\<something>.yml` files. We build the nginx container on the server and it bakes in the ports listed in this file.
 
@@ -115,13 +115,13 @@ This command also deploys a static website stored in the `templates` folder of t
 
 The file `www.tar.gz` is a tar bomb. Be careful :)
 
-Sometimes the new docker install is finicky. If you get an error during the nginx build saying something like "Are you sure docker is running". you can try the whole command again or:
+Sometimes the new Docker install is finicky. If you get an error during the nginx build saying something like "Are you sure Docker is running". you can try the whole command again or:
 
 ```
 $ make containers && make site
 ```
 
-Which skips the docker installation. Finally, you can redeploy any site using the longer ansible command:
+Which skips the Docker installation. Finally, you can redeploy any site using the longer Ansible command:
 
 ```
 $ ansible-playbook -i development.hosts playbooks/webserver.yml -t deploy-<container_name>
@@ -136,7 +136,7 @@ $ ssh -i path_to_keypair ubuntu@ip_address
 $ start-web-stack
 ```
 
-The nginx-powered website is available at: `http:\\ip_address` and the kibana instance is available at: `http:\\ip_address:8080`
+The nginx-powered website is available at: `http:\\ip_address` and the Kibana instance is available at: `http:\\ip_address:8080`
 
 Stop the servers using the command:
 
@@ -146,9 +146,9 @@ $ stop-web-stack
 
 #TODO
 
-Access to the ElasticSearch instance is controlled by the security group filewall not allowing 9200. It would be better to do this with an internal firewall
+Access to the ElasticSearch instance is controlled by the security group firewall not allowing 9200. It would be better to do this with an internal firewall
 
-The nginx instance needs hardening up (no SSL, various other bad practices). Also the docker container itself could be streamlined more and integrate rsyslog more betterer.
+The nginx instance needs hardening up (no SSL, various other bad practices). Also the Docker container itself could be streamlined more and integrate rsyslog more betterer.
 
 The system could be tweaked to sit behind an ELB and incorporate some scaling solution. It would be nice to use this framework to deploy identical instances to multiple regions!
 
