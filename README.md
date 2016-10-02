@@ -10,7 +10,9 @@ This is an Ansible project that deploys an nginx-elastic-kibana web stack onto A
 
 From an base ubuntu install use:
 
-    sudo aptitude install git build-essential virtualenv python-dev libssl-dev
+```
+$ sudo aptitude install git build-essential virtualenv python-dev libssl-dev
+```
 
 #Getting started
 
