@@ -8,6 +8,10 @@ This is an Ansible project that deploys an nginx-elastic-kibana web stack onto A
   - Python 2.7 or better
   - An AWS account and an AWS_ACCESS_KEY and AWS_SECRET_ACCESS_KEY
 
+From an base ubuntu install use:
+
+    sudo aptitude install git build-essential virtualenv python-dev libssl-dev
+
 #Getting started
 
 The setup is opinionated. It assumes you'd like to set up Ansible in a virtual environment. Please do.

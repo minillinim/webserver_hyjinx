@@ -1,4 +1,4 @@
-source /home/mimelfor/working/personal/webserver_hyjinx/local/opt/python_ansible/bin/activate
-export ANSIBLE_ROOT=/home/mimelfor/working/personal/webserver_hyjinx
-export ANSIBLE_CONFIG=/home/mimelfor/working/personal/webserver_hyjinx/playbooks/ansible.cfg
-export ANSIBLE_VAULT_PASSWORD_FILE=/home/mimelfor/working/personal/webserver_hyjinx/vault.passwd
+source /home/minillinim/working/personal/webserver_hyjinx/local/opt/python_ansible/bin/activate
+export ANSIBLE_ROOT=/home/minillinim/working/personal/webserver_hyjinx
+export ANSIBLE_CONFIG=/home/minillinim/working/personal/webserver_hyjinx/playbooks/ansible.cfg
+export ANSIBLE_VAULT_PASSWORD_FILE=/home/minillinim/working/personal/webserver_hyjinx/vault.passwd
